@@ -6,7 +6,11 @@ typedef struct Skip_list	list_t;
 static uint32_t next_rand(list_t *const list) {
 	assert(list);
 
-	list->rand_state = list->rand_state * 1103515245u + 12345u;
+	uint32_t x = list->rand_state;
+	x ^= x << 13;
+	x ^= x >> 17;
+	x ^= x << 5;
+	list->rand_state = x;
 	return list->rand_state;
 }
 
@@ -88,7 +92,7 @@ static size_t random_level(list_t *const list) {
 	assert(list);
 
 	size_t level = 1;
-	while (level < SKIP_LIST_MAX_LEVEL && (next_rand(list) & 1u)) {
+	while (level < SKIP_LIST_MAX_LEVEL && ((next_rand(list) >> 30) == 0)) {
 		level++;
 	}
 
