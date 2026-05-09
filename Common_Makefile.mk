@@ -131,7 +131,7 @@ $(TARGET): $(call make_obj_path,$(SRC))
 
 
 
-.PHONY: prepare all test smoke clean
+.PHONY: prepare all test clean
 
 prepare::
 	@$(call make_dir,$(DEP_SUBDIR))
@@ -145,7 +145,7 @@ all: $(TARGET)
 	@echo Build end
 .DEFAULT_GOAL = all
 
-test smoke: $(TARGET)
+test: $(TARGET)
 	@$(RUN_TARGET)
 
 clean::
