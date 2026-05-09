@@ -13,10 +13,17 @@
 #define FINAL_CODE
 
 int main(int argc, char *argv[]) {
-	assert(argc == 4); assert(argv);
+	assert(argv);
+	if (argc != 4) {
+		fprintf(stderr, "Usage: %s <insert_cnt> <random|sorted> <insert|erase>\n", argv[0]);
+		return 1;
+	}
 
 	size_t insert_cnt = 0;
-	sscanf(argv[1], "%zu", &insert_cnt);
+	if (sscanf(argv[1], "%zu", &insert_cnt) != 1) {
+		fprintf(stderr, "Bad insert_cnt: %s\n", argv[1]);
+		return 1;
+	}
 
 	enum Data_type data_type = RANDOM_DATA;
 	CHECK_PROC(parse_data_type, argv[2], &data_type);

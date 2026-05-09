@@ -21,6 +21,12 @@ ACTIVE_COUNT_ARR	= $(COUNT_ARR)
 
 endif
 
+ifeq ($(origin INSERT_CNT),command line)
+
+ACTIVE_COUNT_ARR	= $(INSERT_CNT)
+
+endif
+
 EXEC_NAME		?= $(TREE_NAME)
 SRC			?= $(TREE_NAME) $(TREE_NAME)_test main
 INC_DIRS		?= inc/ ../Common/inc/
