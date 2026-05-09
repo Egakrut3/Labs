@@ -56,12 +56,10 @@ bench: bench_$(OPERATION)
 bench_all: bench_insert bench_erase
 
 bench_insert: $(TARGET) check_hyperfine | prepare
-	@hyperfine --warmup $(HYPERFINE_WARMUPS) --runs $(HYPERFINE_RUNS) --export-json $(call make_raw_path,insert)	\
-	$(foreach cnt,$(ACTIVE_COUNT_ARR),"$(RUN_TARGET) $(cnt) $(DATA_TYPE) insert")
+	@hyperfine --warmup $(HYPERFINE_WARMUPS) --runs $(HYPERFINE_RUNS) --export-json $(call make_raw_path,insert) $(foreach cnt,$(ACTIVE_COUNT_ARR),"$(RUN_TARGET) $(cnt) $(DATA_TYPE) insert")
 
 bench_erase: $(TARGET) check_hyperfine | prepare
-	@hyperfine --warmup $(HYPERFINE_WARMUPS) --runs $(HYPERFINE_RUNS) --export-json $(call make_raw_path,erase)	\
-	$(foreach cnt,$(ACTIVE_COUNT_ARR),"$(RUN_TARGET) $(cnt) $(DATA_TYPE) erase")
+	@hyperfine --warmup $(HYPERFINE_WARMUPS) --runs $(HYPERFINE_RUNS) --export-json $(call make_raw_path,erase) $(foreach cnt,$(ACTIVE_COUNT_ARR),"$(RUN_TARGET) $(cnt) $(DATA_TYPE) erase")
 
 graph: graph_$(OPERATION)
 
@@ -78,3 +76,6 @@ smoke: $(TARGET)
 	@$(RUN_TARGET) 100 random erase
 	@$(RUN_TARGET) 1000 random insert
 	@$(RUN_TARGET) 1000 random erase
+
+clean::
+	@$(call remove_dir,$(RESULTS_DIR))
