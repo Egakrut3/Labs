@@ -1,10 +1,6 @@
-*.o
-*.elf
-*.exe
 *.old
 
 bin/
 dep/
 results/
-__pycache__/
 .vscode/

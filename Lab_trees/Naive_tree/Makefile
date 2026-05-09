@@ -1,0 +1,6 @@
+TREE_NAME		= Naive_tree
+DEFAULT_INSERT_CNT	= 100000
+COUNT_ARR		= 100000
+SORTED_COUNT_ARR	= 10000
+
+include ../Common_Tree_Makefile.mk
