@@ -4,7 +4,7 @@ make_results_path	?= $(addprefix $(RESULTS_DIR),$(1))
 
 
 DATA_TYPE	?= random
-ifeq (DATA_TYPE,random)
+ifeq ($(DATA_TYPE),random)
 
 __DATA_TYPE	= 0
 
@@ -17,7 +17,7 @@ endif
 
 
 QUERIES_TYPE	?= insert
-ifeq (QUERIES_TYPE,insert)
+ifeq ($(QUERIES_TYPE),insert)
 
 __QUERIES_TYPE	= 0
 
@@ -51,7 +51,8 @@ prepare::
 HYPERFINE_WARMUPS	?= 1
 HYPERFINE_RUNS		?= 5
 hyperfine_report: $(TARGET) | prepare
-	@hyperfine --warmup $(HYPERFINE_WARMUPS) --runs $(HYPERFINE_RUNS) --export-json $(call make_results_path,$(DATA_TYPE)_$(QUERIES_TYPE)_$(QUERIES_CNT)_results.json) "$(RUN_TARGET)"
+	@hyperfine	--export-json $(call make_results_path,$(DATA_TYPE)_$(QUERIES_TYPE)_$(QUERIES_CNT)_results.json)	\
+			--warmup $(HYPERFINE_WARMUPS) --runs $(HYPERFINE_RUNS) "$(RUN_TARGET)"
 
 clean::
 	@rm -rf $(RESULTS_DIR)
