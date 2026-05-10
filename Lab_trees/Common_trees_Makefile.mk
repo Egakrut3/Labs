@@ -1,5 +1,5 @@
-RESULTS_DIR	?= results/
-make_results_path	= $(addprefix $(RESULTS_DIR),$(1))
+RESULTS_DIR		?= results/
+make_results_path	?= $(addprefix $(RESULTS_DIR),$(1))
 
 
 
@@ -51,8 +51,7 @@ prepare::
 HYPERFINE_WARMUPS	?= 1
 HYPERFINE_RUNS		?= 5
 hyperfine_report: $(TARGET) | prepare
-	@hyperfine --warmup $(HYPERFINE_WARMUPS) --runs $(HYPERFINE_RUNS) --export-json $(call make_results_path,hyperfine_results$(TEST_TYPE).json) "$(RUN_TARGET)"
+	@hyperfine --warmup $(HYPERFINE_WARMUPS) --runs $(HYPERFINE_RUNS) --export-json $(call make_results_path,$(DATA_TYPE)_$(QUERIES_TYPE)_$(QUERIES_CNT)_results.json) "$(RUN_TARGET)"
 
 clean::
 	@rm -rf $(RESULTS_DIR)
-
