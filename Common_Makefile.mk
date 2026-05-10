@@ -101,7 +101,7 @@ endif
 
 
 LINKER		?=	gcc
-LINKER_OPTIONS	?=	-pie
+LINKER_OPTIONS	?=	-pie $(COMPILER_FEATURES)
 
 
 
