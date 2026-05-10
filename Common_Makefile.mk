@@ -106,7 +106,7 @@ LINKER_OPTIONS	?=	-pie
 
 
 make_obj_and_dep_recipe ?=													\
-$(call make_obj_path,$(1)) $(call make_dep_path,$(1)): $(call make_src_path,$(1)) | prepare;					\
+$(call make_obj_path,$(1)) $(call make_dep_path,$(1))&: $(call make_src_path,$(1)) | prepare;					\
 	@$(COMPILER)	-c -o $(call make_obj_path,$(1))									\
 			-MMD -MT $(call make_obj_path,$(1)) -MT $(call make_dep_path,$(1)) -MF $(call make_dep_path,$(1))	\
 			$(OPTIONS) -I$(INC_DIR) $$<
