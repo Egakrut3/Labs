@@ -3,11 +3,20 @@ RELEASE		?= 0
 ALLOW_CPP	?= 1
 
 
+INC_DIR		?= inc/
 
+
+
+SRC_DIR		?= src/
+SRC_SUF		?= .cpp
+make_src_path	?= $(addprefix $(SRC_DIR),$(addsuffix $(SRC_SUF),$(1)))
+
+
+
+COMPILER	?= gcc
 ifndef (OPTIONS)
 
-FIXED_OPTIONS	+=	-mavx512f	\
-			-pie -fPIE
+FIXED_OPTIONS	+=	-pie -fPIE
 
 ifeq ($(ALLOW_CPP),0)
 
@@ -21,8 +30,7 @@ endif
 
 ifeq ($(RELEASE),0)
 
-FIXED_OPTIONS	+=	-Og	\
-			-ggdb3
+FIXED_OPTIONS	+=	-Og -ggdb3
 
 WARNINGS	+=	-Wall -Wextra -Waggressive-loop-optimizations -Wmissing-declarations -Wcast-align -Wcast-qual -Wchar-subscripts -Wconversion -Wempty-body -Wfloat-equal	\
 			-Wformat-nonliteral -Wformat-security -Wformat-signedness -Wformat=2 -Winline -Wlogical-op -Wopenmp-simd -Wpacked -Wpointer-arith -Winit-self		\
@@ -45,8 +53,7 @@ endif
 
 else
 
-FIXED_OPTIONS	+=	-Ofast		\
-			-DNDEBUG
+FIXED_OPTIONS	+=	-Ofast -DNDEBUG
 
 endif
 
@@ -55,12 +62,6 @@ OPTIONS = $(FIXED_OPTIONS) $(WARNINGS) $(FEATURES)
 endif
 
 
-
-INC_DIR		?= inc/
-
-SRC_DIR		?= src/
-SRC_SUF		?= .cpp
-make_src_path	?= $(addprefix $(SRC_DIR),$(addsuffix $(SRC_SUF),$(1)))
 
 DEP_DIR		?= dep/
 ifeq ($(RELEASE),0)
@@ -75,9 +76,6 @@ endif
 DEP_SUF		?= .mk
 make_dep_path	?= $(addprefix $(DEP_SUBDIR),$(addsuffix $(DEP_SUF),$(1)))
 
-make_dep_rule	?= $(call make_dep_path,$(1)): $(call make_src_path,$(1)) | prepare;	\
-	@gcc -MM $(OPTIONS) -I$(INC_DIR) $$< | sed 's,$(addsuffix $(OBJ_SUF),\($(1)\))[ :]*,$(call make_obj_path,\1) $$@: ,g' > $$@
-
 
 
 BIN_DIR		?= bin/
@@ -90,26 +88,32 @@ else
 BIN_SUBDIR	?= $(addprefix $(BIN_DIR),release/)
 
 endif
+
 OBJ_SUF		?= .o
 make_obj_path	?= $(addprefix $(BIN_SUBDIR),$(addsuffix $(OBJ_SUF),$(1)))
 
 EXEC_SUF	?= .elf
 make_exec_path	?= $(addprefix $(BIN_SUBDIR),$(addsuffix $(EXEC_SUF),$(1)))
+
 TARGET		?= $(call make_exec_path,Test)
 RUN_TARGET	?= ./$(TARGET)
 
-make_obj_rule	?= $(call make_obj_path,$(1)): $(call make_src_path,$(1)) | prepare;	\
-	@gcc -c $(OPTIONS) -I$(INC_DIR) -o $$@ $$<
+
+
+make_obj_and_dep_recipe ?=													\
+$(call make_obj_path,$(1)) $(call make_dep_path,$(1)): $(call make_src_path,$(1)) | prepare;					\
+	@$(COMPILER)	-c -o $(call make_obj_path,$(1))									\
+			-MMD -MT $(call make_obj_path,$(1)) -MT $(call make_dep_path,$(1)) -MF $(call make_dep_path,$(1))	\
+			$(OPTIONS) -I$(INC_DIR) $$<
 
 
 
-$(foreach src,$(SRC),$(eval $(call make_dep_rule,$(src))))
 ifeq ($(filter clean,$(MAKECMDGOALS)),)
 
 include $(call make_dep_path,$(SRC))
 
 endif
-$(foreach src,$(SRC),$(eval $(call make_obj_rule, $(src))))
+$(foreach src,$(SRC),$(eval $(call make_obj_and_dep_recipe, $(src))))
 $(TARGET): $(call make_obj_path,$(SRC))
 
 
