@@ -50,10 +50,13 @@ RUN_TARGET	?= ./$(TARGET)
 
 
 
-COMPILER		?=	gcc
+COMPILER		=	gcc -c
+
 ifndef (COMPILER_OPTIONS)
 
-COMPILER_FIXED_OPTIONS	+=	-fPIE
+ifndef (COMPILER_FIXED_OPTIONS)
+
+COMPILER_FIXED_OPTIONS	=
 
 ifeq ($(ALLOW_CPP),0)
 
@@ -69,11 +72,42 @@ ifeq ($(RELEASE),0)
 
 COMPILER_FIXED_OPTIONS	+=	-Og -ggdb3
 
+else
+
+COMPILER_FIXED_OPTIONS	+=	-Ofast -DNDEBUG
+
+endif
+
+endif
+
+ifndef (COMPILER_WARNINGS)
+
+COMPILER_WARNINGS	=
+
+ifeq ($(RELEASE),0)
+
 COMPILER_WARNINGS	+=	-Wall -Wextra -Waggressive-loop-optimizations -Wmissing-declarations -Wcast-align -Wcast-qual -Wchar-subscripts -Wconversion -Wempty-body	\
 				-Wfloat-equal -Wformat-nonliteral -Wformat-security -Wformat-signedness -Wformat=2 -Winline -Wlogical-op -Wopenmp-simd -Wpacked -Wpointer-arith	\
 				-Winit-self -Wredundant-decls -Wshadow -Wsign-conversion -Wstrict-overflow=2 -Wsuggest-attribute=noreturn -Wsuggest-final-methods		\
 				-Wsuggest-final-types -Wswitch-default -Wswitch-enum -Wsync-nand -Wundef -Wunreachable-code -Wunused -Wuseless-cast -Wvariadic-macros		\
 				-Wno-missing-field-initializers -Wno-narrowing -Wno-varargs -Wstack-protector -Wlarger-than=8192 -Wstack-usage=8192 -Werror=vla
+
+ifeq ($(ALLOW_CPP),1)
+
+COMPILER_WARNINGS	+=	-Weffc++ -Wc++14-compat -Woverloaded-virtual -Wconditionally-supported -Wctor-dtor-privacy -Wnon-virtual-dtor -Wsign-promo			\
+				-Wstrict-null-sentinel -Wsuggest-override -Wno-literal-suffix -Wno-old-style-cast
+
+endif
+
+endif
+
+endif
+
+ifndef (COMPILER_FEATURES)
+
+COMPILER_FEATURES	=	-fPIE
+
+ifeq ($(RELEASE),0)
 
 COMPILER_FEATURES	+=	-fcheck-new -fstack-protector -fstrict-overflow -flto-odr-type-merging -fno-omit-frame-pointer							\
 				-fsanitize=address,alignment,bool,bounds,enum,float-cast-overflow,float-divide-by-zero,integer-divide-by-zero,leak,nonnull-attribute,null	\
@@ -81,16 +115,11 @@ COMPILER_FEATURES	+=	-fcheck-new -fstack-protector -fstrict-overflow -flto-odr-t
 
 ifeq ($(ALLOW_CPP),1)
 
-COMPILER_WARNINGS	+=	-Weffc++ -Wc++14-compat -Woverloaded-virtual -Wconditionally-supported -Wctor-dtor-privacy -Wnon-virtual-dtor -Wsign-promo			\
-				-Wstrict-null-sentinel -Wsuggest-override -Wno-literal-suffix -Wno-old-style-cast
-
 COMPILER_FEATURES	+=	-fsized-deallocation
 
 endif
 
-else
-
-COMPILER_FIXED_OPTIONS	+=	-Ofast -DNDEBUG
+endif
 
 endif
 
@@ -100,14 +129,18 @@ endif
 
 
 
-LINKER		?=	gcc
-LINKER_OPTIONS	?=	-pie $(COMPILER_FEATURES)
+ifndef (LINKER)
+
+LINKER		=	gcc
+LINKER_OPTIONS	=	-pie $(COMPILER_FEATURES)
+
+endif
 
 
 
 make_obj_and_dep_recipe ?=													\
 $(call make_obj_path,$(1)) $(call make_dep_path,$(1))&: $(call make_src_path,$(1)) | prepare;					\
-	@$(COMPILER)	-c -o $(call make_obj_path,$(1))									\
+	@$(COMPILER)	-o $(call make_obj_path,$(1))										\
 			-MMD -MT $(call make_obj_path,$(1)) -MT $(call make_dep_path,$(1)) -MF $(call make_dep_path,$(1))	\
 			$(COMPILER_OPTIONS) -I$(INC_DIR) $$<
 
