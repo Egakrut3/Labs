@@ -72,9 +72,9 @@ do {										\
 #define FREE_ANY_ELEM(elem, size)		free_sized((elem), size)
 #define FREE_ANY_ARR(arr, n, size)		free_sized((arr), size * n)
 
-#define ALLOC_ELEM(dst)				CHECK_PROC(my_malloc, (void *restrict *restrict)&(dst), sizeof(*(dst)))
-#define CALLOC_ARR(dst, n)			CHECK_PROC(my_calloc, (void *restrict *restrict)&(dst), n, sizeof(*(dst)))
-#define REALLOC_ARR(dst, new_n)			CHECK_PROC(my_reallocarray, (void *restrict *restrict)&(dst), (dst), new_n, sizeof(*(dst)))
+#define ALLOC_ELEM(dst)				CHECK_PROC(my_malloc, (void *__restrict *__restrict)&(dst), sizeof(*(dst)))
+#define CALLOC_ARR(dst, n)			CHECK_PROC(my_calloc, (void *__restrict *__restrict)&(dst), n, sizeof(*(dst)))
+#define REALLOC_ARR(dst, new_n)			CHECK_PROC(my_reallocarray, (void *__restrict *__restrict)&(dst), (dst), new_n, sizeof(*(dst)))
 #define FREE_ELEM(elem)				FREE_ANY_ELEM((elem), sizeof(*(elem)))
 #define FREE_ARR(arr, n)			FREE_ANY_ARR((arr), n, sizeof(*(arr)))
 
