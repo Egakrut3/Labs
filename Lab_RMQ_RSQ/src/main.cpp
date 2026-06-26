@@ -1,36 +1,34 @@
-#include "Fenwick_tree.hpp"
-#include "Segment_tree.hpp"
+#include "Tester.hpp"
 
-int main() {
+int main(int const argc, char const *const __restrict argv[]) {
 	#define FINAL_CODE
 
-	struct Segment_tree *tree = nullptr;
-	NEW(Segment_tree, tree, 5);
+	assert(argc == 3); assert(argv);
+	assert(argv[1]);
+
+	size_t	res_size		= 0;
+	char	*res_buf 		= nullptr;
+	FILE	*__restrict output	= open_memstream(&res_buf, &res_size);
+	if (!output) { LEAVE(errno); }
 	#undef FINAL_CODE
-	#define FINAL_CODE			\
-	DELETE_UNCHECKED(Segment_tree, tree);
+	#define FINAL_CODE		\
+	fclose(output);			\
+	FREE_ARR(res_buf, res_size);
 
-	long sum = 0;
-	CHECK_PROC(Segment_tree_get, tree, 0, 5, &sum);
-	printf("%ld\n", sum);
+	CHECK_PROC(Tester, (enum Test_type)(argv[1][0] - '0'), output);
+	fclose(output);
+	#undef FINAL_CODE
+	#define FINAL_CODE		\
+	FREE_ARR(res_buf, res_size);
 
-	CHECK_PROC(Segment_tree_set, tree, 2, 7);
-	CHECK_PROC(Segment_tree_get, tree, 0, 5, &sum);
-	printf("%ld\n", sum);
+	output = fopen(argv[2], "w");
+	if (!output) { LEAVE(errno); }
+	#undef FINAL_CODE
+	#define FINAL_CODE	\
+	fclose(output);		\
+	free(res_buf);
 
-	CHECK_PROC(Segment_tree_set, tree, 4, 6);
-	CHECK_PROC(Segment_tree_get, tree, 2, 4, &sum);
-	printf("%ld\n", sum);
-	CHECK_PROC(Segment_tree_get, tree, 2, 5, &sum);
-	printf("%ld\n", sum);
-	CHECK_PROC(Segment_tree_get, tree, 3, 5, &sum);
-	printf("%ld\n", sum);
-	CHECK_PROC(Segment_tree_get, tree, 3, 4, &sum);
-	printf("%ld\n", sum);
-
-	CHECK_PROC(Segment_tree_set, tree, 2, 100);
-	CHECK_PROC(Segment_tree_get, tree, 0, 5, &sum);
-	printf("%ld\n", sum);
+	if (fwrite(res_buf, sizeof(char), res_size, output) < res_size) { LEAVE(errno); }
 
 	LEAVE(0);
 
