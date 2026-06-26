@@ -19,3 +19,6 @@ $(RESULTS_DIR)Test2.csv: $(TARGET) | prepare
 all_tests:
 	$(MAKE) $(RESULTS_DIR)Test1.csv
 	$(MAKE) $(RESULTS_DIR)Test2.csv
+
+clean::
+	@rm -rf $(RESULTS_DIR)
