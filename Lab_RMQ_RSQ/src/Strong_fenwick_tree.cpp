@@ -7,11 +7,10 @@ int Strong_fenwick_tree_ctor(struct Strong_fenwick_tree *dst, size_t size) {
 
 	dst->size = size;
 	CALLOC_ARR(dst->buffer, size);
-	#undef FINAL_CODE
-	#define FINAL_CODE		\
-	FREE_ARR(dst->buffer, size);
-
 	dst->buffer -= 1;
+	#undef FINAL_CODE
+	#define FINAL_CODE			\
+	FREE_ARR(dst->buffer + 1, size);
 
 	CALLOC_ARR(dst->arr, size);
 	#undef FINAL_CODE
@@ -65,8 +64,7 @@ int Strong_fenwick_tree_dtor(struct Strong_fenwick_tree *const obj) {
 
 	FREE_ARR(obj->arr, obj->size);
 
-	obj->buffer += 1;
-	FREE_ARR(obj->buffer, obj->size);
+	FREE_ARR(obj->buffer + 1, obj->size);
 
 	LEAVE(0);
 }

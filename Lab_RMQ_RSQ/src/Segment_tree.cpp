@@ -55,8 +55,7 @@ int Segment_tree_get(struct Segment_tree const *const __restrict obj, size_t con
 int Segment_tree_dtor(struct Segment_tree *const obj) {
 	assert(obj);
 
-	obj->buffer += 1;
-	FREE_ARR(obj->buffer, obj->pow2 * 2 - 1);
+	FREE_ARR(obj->buffer + 1, obj->pow2 * 2 - 1);
 
 	LEAVE(0);
 }

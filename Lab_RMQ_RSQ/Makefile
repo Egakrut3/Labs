@@ -1,4 +1,4 @@
-SRC = My_std Strong_fenwick_tree Segment_tree Tester main
+SRC = My_std Strong_fenwick_tree Segment_tree Sparce_table Tester main
 
 COMMON_MAKEFILE_PATH = ../Common_Makefile.mk
 include $(COMMON_MAKEFILE_PATH)

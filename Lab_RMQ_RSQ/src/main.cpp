@@ -1,4 +1,5 @@
 #include "Tester.hpp"
+#include "Sparce_table.hpp"
 
 int main(int const argc, char const *const __restrict argv[]) {
 	#define FINAL_CODE

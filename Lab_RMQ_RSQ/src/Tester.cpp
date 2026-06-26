@@ -1,7 +1,8 @@
 #include "Tester.hpp"
 
-#include "Strong_fenwick_tree.hpp"
 #include "Segment_tree.hpp"
+#include "Sparce_table.hpp"
+#include "Strong_fenwick_tree.hpp"
 #include <time.h>
 
 
@@ -11,13 +12,13 @@
 static void generate_segment(size_t *const __restrict l, size_t *const __restrict r) {
 	*l = (size_t)random() % (N + 1);
 	*r = (size_t)random() % N;
-	if (l > r)	{ size_t tmp = *r; *r = *l; *l = tmp; }
+	if (*l > *r)	{ size_t tmp = *r; *r = *l; *l = tmp; }
 	else		{ *r += 1; }
 }
 
 #define NRUNS ((size_t)5)
 
-static int Tester1(FILE *const output) {
+static int Tester1(FILE *const __restrict output) {
 	#define FINAL_CODE
 
 	assert(output);
@@ -31,20 +32,20 @@ static int Tester1(FILE *const output) {
 	double	fnw_time = 0,
 		seg_time = 0;
 	for (size_t it = 0; it < NRUNS; it++) {
-		struct Strong_fenwick_tree *fnw = nullptr;
+		struct Strong_fenwick_tree *__restrict fnw = nullptr;
 		NEW(Strong_fenwick_tree, fnw, N);
 		#undef FINAL_CODE
 		#define FINAL_CODE				\
 		DELETE_UNCHECKED(Strong_fenwick_tree, fnw);
 
-		struct Segment_tree *seg = nullptr;
+		struct Segment_tree *__restrict seg = nullptr;
 		NEW(Segment_tree, seg, N);
 		#undef FINAL_CODE
 		#define FINAL_CODE				\
 		DELETE_UNCHECKED(Segment_tree, seg);		\
 		DELETE_UNCHECKED(Strong_fenwick_tree, fnw);
 
-		struct Query *queries = nullptr;
+		struct Query *__restrict queries = nullptr;
 		CALLOC_ARR(queries, N);
 		#undef FINAL_CODE
 		#define FINAL_CODE				\
@@ -53,8 +54,9 @@ static int Tester1(FILE *const output) {
 		DELETE_UNCHECKED(Strong_fenwick_tree, fnw);
 
 		for (size_t i = 0; i < N; i++) {
-			CHECK_PROC(Strong_fenwick_tree_set, fnw, i, (int)random());
-			CHECK_PROC(Segment_tree_set, seg, i, (int)random());
+			int val = (int)random();
+			CHECK_PROC(Strong_fenwick_tree_set, fnw, i, val);
+			CHECK_PROC(Segment_tree_set, seg, i, val);
 
 			queries[i].is_q = (byte_t)random() & 1;
 			if (queries[i].is_q) {
@@ -123,8 +125,104 @@ static int Tester1(FILE *const output) {
 	#undef FINAL_CODE
 }
 
-static int Tester2(FILE *const output) {
-	assert(false);
+static int Tester2(FILE *const __restrict output) {
+	#define FINAL_CODE
+
+	assert(output);
+
+	struct Query {
+		size_t	fir,
+			sec;
+	};
+
+	double	long_time = 0,
+		tall_time = 0;
+	for (size_t it = 0; it < NRUNS; it++) {
+		int *__restrict arr = nullptr;
+		CALLOC_ARR(arr, N);
+		#undef FINAL_CODE
+		#define FINAL_CODE	\
+		FREE_ARR(arr, N);
+
+		struct Query *__restrict queries = nullptr;
+		CALLOC_ARR(queries, N);
+		#undef FINAL_CODE
+		#define FINAL_CODE	\
+		FREE_ARR(queries, N);	\
+		FREE_ARR(arr, N);
+
+		for (size_t i = 0; i < N; i++) {
+			arr[i] = (int)random();
+
+			generate_segment(&queries[i].fir, &queries[i].sec);
+			if (queries[i].fir >= queries[i].sec) {
+				printf("%zu\n", i);
+				abort();
+			}
+		}
+
+		struct Long_sparce_table *__restrict l_sp = nullptr;
+		NEW(Long_sparce_table, l_sp, N, arr);
+		#undef FINAL_CODE
+		#define FINAL_CODE				\
+		DELETE_UNCHECKED(Long_sparce_table, l_sp);	\
+		FREE_ARR(queries, N);				\
+		FREE_ARR(arr, N);
+
+		struct Tall_sparce_table *__restrict t_sp = nullptr;
+		NEW(Tall_sparce_table, t_sp, N, arr);
+		FREE_ARR(arr, N);
+		#undef FINAL_CODE
+		#define FINAL_CODE				\
+		DELETE_UNCHECKED(Tall_sparce_table, t_sp);	\
+		DELETE_UNCHECKED(Long_sparce_table, l_sp);	\
+		FREE_ARR(queries, N);
+
+
+
+		struct timespec	beg_tm = {},
+				end_tm = {};
+		int		result = 0;
+		
+		if (clock_gettime(CLOCK_MONOTONIC, &beg_tm)) { LEAVE(errno); }
+
+		for (size_t i = 0; i < N; i++) {
+			CHECK_PROC(Long_sparce_table_get, l_sp, queries[i].fir, queries[i].sec, &result);
+		}
+
+		if (clock_gettime(CLOCK_MONOTONIC, &end_tm)) { LEAVE(errno); }
+		long_time +=	(double)end_tm.tv_sec + (double)end_tm.tv_nsec / 1'000'000'000 -
+				(double)beg_tm.tv_sec - (double)beg_tm.tv_nsec / 1'000'000'000;
+
+
+
+		if (clock_gettime(CLOCK_MONOTONIC, &beg_tm)) { LEAVE(errno); }
+
+		for (size_t i = 0; i < N; i++) {
+			CHECK_PROC(Tall_sparce_table_get, t_sp, queries[i].fir, queries[i].sec, &result);
+		}
+
+		if (clock_gettime(CLOCK_MONOTONIC, &end_tm)) { LEAVE(errno); }
+		tall_time +=	(double)end_tm.tv_sec + (double)end_tm.tv_nsec / 1'000'000'000 -
+				(double)beg_tm.tv_sec - (double)beg_tm.tv_nsec / 1'000'000'000;
+
+
+
+		FREE_ARR(queries, N);
+		#undef FINAL_CODE
+		#define FINAL_CODE				\
+		DELETE_UNCHECKED(Long_sparce_table, l_sp);
+		DELETE_CHECKED(Tall_sparce_table, t_sp);
+
+		#undef FINAL_CODE
+		#define FINAL_CODE
+		DELETE_CHECKED(Long_sparce_table, l_sp);
+	}
+
+	fprintf(output, "%g,%g,", long_time / NRUNS, tall_time / NRUNS);
+	LEAVE(0);
+
+	#undef FINAL_CODE
 }
 
 #define FINAL_CODE
