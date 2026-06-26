@@ -40,7 +40,7 @@ int Dynamic_array_push_back(struct Dynamic_array *const obj, void const *const v
 int Dynamic_array_pop_back(struct Dynamic_array *const obj) {
 	assert(obj);
 
-	if (obj->end == obj->begin) { LEAVE(EPOP_FROM_EMPTY); }
+	if (obj->end == obj->begin) { LEAVE(EACCESS_NON_EXISTENT); }
 	obj->end -= obj->elem_size;
 	CHECK_PROC(obj->elem_free, obj->end);
 

@@ -37,7 +37,7 @@ int Forward_list_erase_after(struct Forward_list *const obj, struct Forward_list
 	assert(obj);
 	assert(where);
 
-	if (where->next == obj->head) { LEAVE(EERASE_AFTER_LAST); }
+	if (where->next == obj->head) { LEAVE(EACCESS_NON_EXISTENT); }
 	struct Forward_list_node *const pos = where->next;
 	where->next = pos->next;
 	CHECK_PROC(obj->elem_free, pos->data);

@@ -26,6 +26,6 @@ size_t Dynamic_array_capacity(struct Dynamic_array const *obj);
 
 int Dynamic_array_dtor(struct Dynamic_array *obj);
 
-#define	EPOP_FROM_EMPTY	0x100
+#define	EACCESS_NON_EXISTENT	0x100
 
 #endif

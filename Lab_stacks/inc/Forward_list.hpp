@@ -31,6 +31,6 @@ size_t Forward_list_size(struct Forward_list const *obj);
 
 int Forward_list_dtor(struct Forward_list *obj);
 
-#define	EERASE_AFTER_LAST	0x100
+#define	EACCESS_NON_EXISTENT	0x100
 
 #endif
