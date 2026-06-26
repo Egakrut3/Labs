@@ -18,7 +18,7 @@ int Forward_list_ctor(struct Forward_list *const dst, size_t const elem_size, as
 	LEAVE(0);
 }
 
-int Forward_list_insert_after(struct Forward_list *const obj, struct Forward_list_node *const where, void const *const val) {
+int Forward_list_insert_after(struct Forward_list *const obj, struct Forward_list_node *const where, void const *const restrict val) {
 	assert(obj);
 	assert(where);
 

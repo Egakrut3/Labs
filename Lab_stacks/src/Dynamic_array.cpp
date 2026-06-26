@@ -27,7 +27,7 @@ static int Dynamic_array_realloc(struct Dynamic_array *const obj, size_t new_cap
 	LEAVE(0);
 }
 
-int Dynamic_array_push_back(struct Dynamic_array *const obj, void const *const val) {
+int Dynamic_array_push_back(struct Dynamic_array *const restrict obj, void const *const restrict val) {
 	assert(obj);
 
 	if (obj->end == obj->buffer_end) { CHECK_PROC(Dynamic_array_realloc, obj, Dynamic_array_capacity(obj) * 2); }

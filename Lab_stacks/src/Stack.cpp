@@ -10,7 +10,7 @@ int DA_stack_ctor(struct DA_stack *const dest, size_t const elem_size, assign_fu
 	LEAVE(0);
 }
 
-int DA_stack_push(struct DA_stack *const obj, void const *const val) {
+int DA_stack_push(struct DA_stack *const restrict obj, void const *const restrict val) {
 	assert(obj);
 
 	CHECK_PROC(Dynamic_array_push_back, &obj->arr, val);
@@ -18,10 +18,10 @@ int DA_stack_push(struct DA_stack *const obj, void const *const val) {
 	LEAVE(0);
 }
 
-int DA_stack_top(struct DA_stack const *const obj, void *const dest) {
+int DA_stack_top(struct DA_stack const *const restrict obj, void *const restrict dest) {
 	assert(obj);
 
-	if (!DA_stack_size(obj)) { return EACCESS_NON_EXISTENT; }
+	if (!DA_stack_size(obj)) { LEAVE(EACCESS_NON_EXISTENT); }
 	CHECK_PROC(obj->arr.elem_assign, dest, obj->arr.end - obj->arr.elem_size);
 
 	LEAVE(0);
@@ -53,7 +53,7 @@ int FL_stack_ctor(struct FL_stack *const dest, size_t const elem_size, assign_fu
 	LEAVE(0);
 }
 
-int FL_stack_push(struct FL_stack *const obj, void const *const val) {
+int FL_stack_push(struct FL_stack *const restrict obj, void const *const restrict val) {
 	assert(obj);
 
 	CHECK_PROC(Forward_list_insert_after, &obj->list, obj->list.head, val);
@@ -61,10 +61,10 @@ int FL_stack_push(struct FL_stack *const obj, void const *const val) {
 	LEAVE(0);
 }
 
-int FL_stack_top(struct FL_stack const *const obj, void *const dest) {
+int FL_stack_top(struct FL_stack const *const restrict obj, void *const restrict dest) {
 	assert(obj);
 	
-	if (!FL_stack_size(obj)) { return EACCESS_NON_EXISTENT; }
+	if (!FL_stack_size(obj)) { LEAVE(EACCESS_NON_EXISTENT); }
 
 
 

@@ -3,7 +3,7 @@
 
 #include "Common.hpp"
 
-typedef int (*assign_func_t)(void *dst, void const *src);
+typedef int (*assign_func_t)(void *restrict dst, void const *restrict src);
 typedef int (*free_func_t)(void *elem);
 
 struct Dynamic_array {
@@ -18,7 +18,7 @@ struct Dynamic_array {
 
 int Dynamic_array_ctor(struct Dynamic_array *dst, size_t elem_size, assign_func_t elem_assign, free_func_t elem_free, size_t capacity);
 
-int Dynamic_array_push_back(struct Dynamic_array *obj, void const *val);
+int Dynamic_array_push_back(struct Dynamic_array *restrict obj, void const *restrict val);
 int Dynamic_array_pop_back(struct Dynamic_array *obj);
 
 size_t Dynamic_array_size(struct Dynamic_array const *obj);
