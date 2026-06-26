@@ -60,11 +60,11 @@ COMPILER_FIXED_OPTIONS	=
 
 ifeq ($(ALLOW_CPP),0)
 
-COMPILER_FIXED_OPTIONS	+=	-std=c23
+COMPILER_FIXED_OPTIONS	+=	-x c -std=gnu23
 
 else
 
-COMPILER_FIXED_OPTIONS	+=	-std=c++23
+COMPILER_FIXED_OPTIONS	+=	-x c++ -std=gnu++23
 
 endif
 
@@ -87,15 +87,19 @@ COMPILER_WARNINGS	=
 ifeq ($(RELEASE),0)
 
 COMPILER_WARNINGS	+=	-Wall -Wextra -Waggressive-loop-optimizations -Wmissing-declarations -Wcast-align -Wcast-qual -Wchar-subscripts -Wconversion -Wempty-body	\
-				-Wfloat-equal -Wformat-nonliteral -Wformat-security -Wformat-signedness -Wformat=2 -Winline -Wlogical-op -Wopenmp-simd -Wpacked -Wpointer-arith	\
-				-Winit-self -Wredundant-decls -Wshadow -Wsign-conversion -Wstrict-overflow=2 -Wsuggest-attribute=noreturn -Wsuggest-final-methods		\
-				-Wsuggest-final-types -Wswitch-default -Wswitch-enum -Wsync-nand -Wundef -Wunreachable-code -Wunused -Wuseless-cast -Wvariadic-macros		\
-				-Wno-missing-field-initializers -Wno-narrowing -Wno-varargs -Wstack-protector -Wlarger-than=8192 -Wstack-usage=8192 -Werror=vla
+				-Wfloat-equal -Wformat-nonliteral -Wformat-security -Wformat-signedness -Wformat=2 -Winline -Wlogical-op -Wopenmp-simd -Wpacked -Winit-self	\
+				-Wredundant-decls -Wshadow -Wsign-conversion -Wstrict-overflow=2 -Wsuggest-attribute=noreturn -Wsuggest-final-methods -Wsuggest-final-types	\
+				-Wswitch-default -Wswitch-enum -Wsync-nand -Wundef -Wunreachable-code -Wunused -Wuseless-cast -Wvariadic-macros -Wno-missing-field-initializers	\
+				-Wno-narrowing -Wno-varargs -Wstack-protector -Wlarger-than=8192 -Wstack-usage=8192 -Werror=vla
 
 ifeq ($(ALLOW_CPP),1)
 
-COMPILER_WARNINGS	+=	-Weffc++ -Wc++14-compat -Woverloaded-virtual -Wconditionally-supported -Wctor-dtor-privacy -Wnon-virtual-dtor -Wsign-promo			\
+COMPILER_WARNINGS	+=	-Wpointer-arith -Weffc++ -Wc++14-compat -Woverloaded-virtual -Wconditionally-supported -Wctor-dtor-privacy -Wnon-virtual-dtor -Wsign-promo			\
 				-Wstrict-null-sentinel -Wsuggest-override -Wno-literal-suffix -Wno-old-style-cast
+
+else
+
+COMPILER_WARNINGS	+=	-Wno-pointer-arith
 
 endif
 
