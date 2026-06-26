@@ -19,7 +19,7 @@ int Dynamic_array_ctor(struct Dynamic_array *const dst, size_t const elem_size, 
 static int Dynamic_array_realloc(struct Dynamic_array *const obj, size_t new_capacity) {
 	assert(obj);
 
-	ptrdiff_t byte_size = obj->end - obj->begin;
+	ptrdiff_t const byte_size = obj->end - obj->begin;
 	REALLOC_ANY_ARR(obj->begin, new_capacity, obj->elem_size);	// We assume trivially relocatable type
 	obj->end	= obj->begin + byte_size;
 	obj->buffer_end	= obj->begin + obj->elem_size * new_capacity;

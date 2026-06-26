@@ -11,9 +11,9 @@ struct Dynamic_array {
 	assign_func_t	elem_assign;
 	free_func_t	elem_free;
 
-	void		*begin,
-			*end,
-			*buffer_end;
+	void	*begin,
+		*end,
+		*buffer_end;
 };
 
 int Dynamic_array_ctor(struct Dynamic_array *dst, size_t elem_size, assign_func_t elem_assign, free_func_t elem_free, size_t capacity);
