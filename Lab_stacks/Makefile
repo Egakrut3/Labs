@@ -9,6 +9,7 @@ prepare::
 
 all_tests: $(TARGET)
 	@$(RUN_TARGET) 0 0 results/DA_1.csv
+	@$(RUN_TARGET) 1 0 results/FL_1.csv
 
 clean::
 	@rm -rf results/
