@@ -1,5 +1,5 @@
-#ifndef _FENWICK_HPP
-#define _FENWICK_HPP
+#ifndef _FENWICK_TREE_HPP
+#define _FENWICK_TREE_HPP
 
 #include "Common.hpp"
 

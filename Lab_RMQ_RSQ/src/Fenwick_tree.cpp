@@ -23,6 +23,7 @@ int Fenwick_tree_increase(struct Fenwick_tree *const obj, size_t ind, int const 
 }
 
 int Fenwick_tree_get_pref(struct Fenwick_tree const *const __restrict obj, size_t r, long *const __restrict dst) {
+	assert(dst);
 	assert(obj);
 
 	*dst = 0;
@@ -45,6 +46,7 @@ int Fenwick_tree_dtor(struct Fenwick_tree *obj) {
 }
 
 int Fenwick_tree_get(struct Fenwick_tree const *const __restrict obj, size_t const l, size_t const r, long *const __restrict dst) {
+	assert(dst);
 	assert(obj);
 
 	CHECK_PROC(Fenwick_tree_get_pref, obj, r, dst);
