@@ -21,14 +21,62 @@ static int int_free(void *const elem) {
 
 #undef FINAL_CODE
 
-static int DA_Tester(enum Test_type const test, FILE *const restrict output) {
+
+
+#define CNT_RUNS ((size_t)3)
+
+static int DA_Test4(FILE *const restrict output) {
 	#define FINAL_CODE
 
 	assert(output);
 
 	typedef struct DA_stack stk_t;
+
+	for (size_t size = 1'000; size <= 1'000'000; size += 1'000) {
+		double avg_time = 0;
+		for (size_t run_num = 0; run_num < CNT_RUNS; run_num++) {
+			stk_t *restrict stk = nullptr;
+			NEW(DA_stack, stk, sizeof(int), int_assign, int_free);
+			#undef FINAL_CODE
+			#define FINAL_CODE			\
+			DELETE_UNCHECKED(DA_stack, stk);
+
+			struct timespec	beg_tm = {},
+					end_tm = {};
+
+			if (clock_gettime(CLOCK_MONOTONIC, &beg_tm)) { LEAVE(errno); }
+
+			for (size_t i = 0; i < size; i++) {
+				CHECK_PROC(DA_stack_push, stk, &(int){(int)i});
+			}
+
+			if (clock_gettime(CLOCK_MONOTONIC, &end_tm)) { LEAVE(errno); }
+
+			avg_time +=	(double)end_tm.tv_sec + (double)end_tm.tv_nsec / 1'000'000'000 -
+					(double)beg_tm.tv_sec - (double)beg_tm.tv_nsec / 1'000'000'000;
+
+			#undef FINAL_CODE
+			#define FINAL_CODE
+			DELETE_CHECKED(DA_stack, stk);
+		}
+
+		fprintf(output, "%g,", avg_time / 3);
+	}
+
+	LEAVE(0);
+
+	#undef FINAL_CODE
+}
+
+static int DA_Tester(enum Test_type const test, FILE *const restrict output) {
+	#define FINAL_CODE
+
+	if (test == TEST4) { CHECK_PROC(DA_Test4, output); LEAVE(0); }
+
+	assert(output);
+
+	typedef struct DA_stack stk_t;
 	double avg_time = 0;
-	#define CNT_RUNS ((size_t)3)
 	for (size_t run_num = 0; run_num < CNT_RUNS; run_num++) {
 		stk_t *restrict stk = nullptr;
 		NEW(DA_stack, stk, sizeof(int), int_assign, int_free);
@@ -154,8 +202,6 @@ static int DA_Tester(enum Test_type const test, FILE *const restrict output) {
 				break;
 
 			case TEST4:
-				break;
-
 			default:
 				PRINT_LINE();
 				abort();
@@ -172,14 +218,58 @@ static int DA_Tester(enum Test_type const test, FILE *const restrict output) {
 	#undef FINAL_CODE
 }
 
-static int FL_Tester(enum Test_type const test, FILE *const restrict output) {
+static int FL_Test4(FILE *const restrict output) {
 	#define FINAL_CODE
 
 	assert(output);
 
 	typedef struct FL_stack stk_t;
+
+	for (size_t size = 1'000; size <= 1'000'000; size += 1'000) {
+		double avg_time = 0;
+		for (size_t run_num = 0; run_num < CNT_RUNS; run_num++) {
+			stk_t *restrict stk = nullptr;
+			NEW(FL_stack, stk, sizeof(int), int_assign, int_free);
+			#undef FINAL_CODE
+			#define FINAL_CODE			\
+			DELETE_UNCHECKED(FL_stack, stk);
+
+			struct timespec	beg_tm = {},
+					end_tm = {};
+
+			if (clock_gettime(CLOCK_MONOTONIC, &beg_tm)) { LEAVE(errno); }
+
+			for (size_t i = 0; i < size; i++) {
+				CHECK_PROC(FL_stack_push, stk, &(int){(int)i});
+			}
+
+			if (clock_gettime(CLOCK_MONOTONIC, &end_tm)) { LEAVE(errno); }
+
+			avg_time +=	(double)end_tm.tv_sec + (double)end_tm.tv_nsec / 1'000'000'000 -
+					(double)beg_tm.tv_sec - (double)beg_tm.tv_nsec / 1'000'000'000;
+
+			#undef FINAL_CODE
+			#define FINAL_CODE
+			DELETE_CHECKED(FL_stack, stk);
+		}
+
+		fprintf(output, "%g,", avg_time / 3);
+	}
+
+	LEAVE(0);
+
+	#undef FINAL_CODE
+}
+
+static int FL_Tester(enum Test_type const test, FILE *const restrict output) {
+	#define FINAL_CODE
+
+	if (test == TEST4) { CHECK_PROC(FL_Test4, output); LEAVE(0); }
+
+	assert(output);
+
+	typedef struct FL_stack stk_t;
 	double avg_time = 0;
-	#define CNT_RUNS ((size_t)3)
 	for (size_t run_num = 0; run_num < CNT_RUNS; run_num++) {
 		stk_t *restrict stk = nullptr;
 		NEW(FL_stack, stk, sizeof(int), int_assign, int_free);
@@ -305,8 +395,6 @@ static int FL_Tester(enum Test_type const test, FILE *const restrict output) {
 				break;
 
 			case TEST4:
-				break;
-
 			default:
 				PRINT_LINE();
 				abort();

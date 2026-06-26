@@ -5,4 +5,5 @@ dep/
 
 .vscode/
 
-results/
+results/*
+!results/Plot.png
