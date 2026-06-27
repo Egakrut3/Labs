@@ -1,9 +1,33 @@
-.PHONY: all clean
+SRC = My_std Naive_tree AVL_tree Tester main
 
-all:
-	@echo Please, run "make" from one of the subdirectories
-.DEFAULT_GOAL = all
+COMMON_MAKEFILE_PATH = ../Common_Makefile.mk
+include $(COMMON_MAKEFILE_PATH)
 
-MERGED_BRANCH_DIR = 
-clean:
-	$(foreach dir,$(MERGED_BRANCH_DIR),$(eval @$(MAKE) -C $(dir) clean))
+.PNONY: all_tests
+
+RESULTS_DIR = results/
+
+prepare::
+	@mkdir -p $(RESULTS_DIR)
+
+$(RESULTS_DIR)Naive.csv: $(TARGET) | prepare
+	@$(RUN_TARGET) 0 $@
+
+$(RESULTS_DIR)Naive_srtd.csv: $(TARGET) | prepare
+	@$(RUN_TARGET) 1 $@
+
+$(RESULTS_DIR)AVL.csv: $(TARGET) | prepare
+	@$(RUN_TARGET) 2 $@
+
+$(RESULTS_DIR)AVL_srtd.csv: $(TARGET) | prepare
+	@$(RUN_TARGET) 3 $@
+
+all_tests:
+	$(MAKE) $(RESULTS_DIR)Naive.csv
+	$(MAKE) $(RESULTS_DIR)Naive_srtd.csv
+
+	$(MAKE) $(RESULTS_DIR)AVL.csv
+	$(MAKE) $(RESULTS_DIR)AVL_srtd.csv
+
+clean::
+	@rm -rf $(RESULTS_DIR)
