@@ -37,5 +37,7 @@ all_tests:
 plot: $(RESULTS_DIR)AVL.csv $(RESULTS_DIR)Treap.csv
 	@python src/plot_drawer.py
 
+total: all_tests plot
+
 clean::
 	@rm -rf $(RESULTS_DIR)

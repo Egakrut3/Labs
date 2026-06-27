@@ -1,1 +1,9 @@
 *.old
+
+bin/
+dep/
+
+.vscode/
+
+results/*
+!results/Plot.png
