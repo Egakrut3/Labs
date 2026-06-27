@@ -3,6 +3,7 @@
 #include "AVL_tree.hpp"
 #include "Naive_tree.hpp"
 #include <time.h>
+#include "Treap_tree.hpp"
 
 #define NRUNS 5
 
@@ -23,6 +24,8 @@ static int int_cmp(void const *const a, void const *const b) {
 
 static int Naive_tree_tester(enum Test_type const type, FILE *const __restrict insert_output, FILE *const __restrict erase_output) {
 	#define FINAL_CODE
+
+	assert(insert_output); assert(erase_output);
 
 	if (type == NAIVE) {
 		int *__restrict buffer = nullptr;
@@ -86,8 +89,10 @@ static int Naive_tree_tester(enum Test_type const type, FILE *const __restrict i
 #include "Universal_tester.hpp"
 #undef TYPE
 
-static int AVL_tester(enum Test_type const type, FILE *const __restrict insert_output, FILE *const __restrict erase_output) {
+static int AVL_tree_tester(enum Test_type const type, FILE *const __restrict insert_output, FILE *const __restrict erase_output) {
 	#define FINAL_CODE
+
+	assert(insert_output); assert(erase_output);
 
 	if (type == AVL) {
 		for (size_t size = 100'000; size <= 1'000'000; size += 100'000) {
@@ -149,6 +154,10 @@ static int AVL_tester(enum Test_type const type, FILE *const __restrict insert_o
 	#undef FINAL_CODE
 }
 
+#define TYPE Treap_tree
+#include "Usual_tester.hpp"
+#undef TYPE
+
 #define FINAL_CODE
 
 int Tester(enum Test_type const type, FILE *const __restrict insert_output, FILE *const __restrict erase_output) {
@@ -160,7 +169,11 @@ int Tester(enum Test_type const type, FILE *const __restrict insert_output, FILE
 
 		case AVL:
 		case AVL_SRTD:
-			CHECK_PROC(AVL_tester, type, insert_output, erase_output);
+			CHECK_PROC(AVL_tree_tester, type, insert_output, erase_output);
+			break;
+
+		case TREAP:
+			CHECK_PROC(Treap_tree_tester, insert_output, erase_output);
 			break;
 
 		default:

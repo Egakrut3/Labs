@@ -48,8 +48,8 @@ int main(int const argc, char const *const __restrict argv[]) {
 	FREE_ARR(ers_res_buf, ers_res_size);	\
 	FREE_ARR(ins_res_buf, ins_res_size);
 
-	ins_res_buf[ins_res_size] = '\n';
-	ins_res_size += 1;
+	ins_res_buf[ins_res_size - 1] = '\n';
+	ers_res_buf[ers_res_size - 1] = '\n';
 	if (fwrite(ins_res_buf, sizeof(char), ins_res_size, output) < ins_res_size) { LEAVE(errno); }
 	if (fwrite(ers_res_buf, sizeof(char), ers_res_size, output) < ers_res_size) { LEAVE(errno); }
 

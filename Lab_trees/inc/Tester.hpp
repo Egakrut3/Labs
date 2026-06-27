@@ -8,6 +8,7 @@ enum Test_type {
 	NAIVE_SRTD,
 	AVL,
 	AVL_SRTD,
+	TREAP,
 };
 
 int Tester(enum Test_type type, FILE *__restrict insert_output, FILE *__restrict erase_output);

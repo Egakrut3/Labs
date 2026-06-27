@@ -1,7 +1,7 @@
 static int CONCAT(TYPE, _test_instance)(size_t const size, int *const __restrict buffer, double *const __restrict insert_time, double *const __restrict erase_time) {
 	#define FINAL_CODE
 
-	assert(buffer);
+	assert(buffer); assert(insert_time); assert(erase_time);
 
 	struct TYPE *__restrict obj = nullptr;
 	NEW(TYPE, obj);

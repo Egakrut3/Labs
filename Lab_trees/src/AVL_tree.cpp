@@ -183,11 +183,11 @@ int AVL_tree_erase(tree_t *const obj, int const val) {
 	LEAVE(0);
 }
 
-static int AVL_recursive_dtor(node_t *const obj) {
+static int AVL_tree_recursive_dtor(node_t *const obj) {
 	if (!obj) { LEAVE(0); }
 
-	CHECK_PROC(AVL_recursive_dtor, obj->left);
-	CHECK_PROC(AVL_recursive_dtor, obj->right);
+	CHECK_PROC(AVL_tree_recursive_dtor, obj->left);
+	CHECK_PROC(AVL_tree_recursive_dtor, obj->right);
 
 	DELETE_CHECKED(AVL_tree_node, obj);
 
@@ -197,7 +197,7 @@ static int AVL_recursive_dtor(node_t *const obj) {
 int AVL_tree_dtor(tree_t *const obj) {
 	assert(obj);
 
-	CHECK_PROC(AVL_recursive_dtor, obj->root);
+	CHECK_PROC(AVL_tree_recursive_dtor, obj->root);
 
 	LEAVE(0);
 }

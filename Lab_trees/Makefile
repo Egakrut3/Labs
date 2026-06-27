@@ -1,4 +1,4 @@
-SRC = My_std Naive_tree AVL_tree Tester main
+SRC = My_std Naive_tree AVL_tree Treap_tree Tester main
 
 COMMON_MAKEFILE_PATH = ../Common_Makefile.mk
 include $(COMMON_MAKEFILE_PATH)
@@ -22,12 +22,17 @@ $(RESULTS_DIR)AVL.csv: $(TARGET) | prepare
 $(RESULTS_DIR)AVL_srtd.csv: $(TARGET) | prepare
 	@$(RUN_TARGET) 3 $@
 
+$(RESULTS_DIR)Treap.csv: $(TARGET) | prepare
+	@$(RUN_TARGET) 4 $@
+
 all_tests:
 	$(MAKE) $(RESULTS_DIR)Naive.csv
 	$(MAKE) $(RESULTS_DIR)Naive_srtd.csv
 
 	$(MAKE) $(RESULTS_DIR)AVL.csv
 	$(MAKE) $(RESULTS_DIR)AVL_srtd.csv
+
+	$(MAKE) $(RESULTS_DIR)Treap.csv
 
 clean::
 	@rm -rf $(RESULTS_DIR)
