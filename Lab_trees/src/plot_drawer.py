@@ -3,12 +3,12 @@ import matplotlib.pyplot as plt
 
 n = list(range(100_000, 1_000_001, 100_000))
 
-with open("results/AVL.csv", "r") as f:
+with open('results/AVL.csv', 'r') as f:
     reader = csv.reader(f)
     avl_insert = [float(x) for x in next(reader)]
     avl_delete = [float(x) for x in next(reader)]
 
-with open("results/Treap.csv", "r") as f:
+with open('results/Treap.csv', 'r') as f:
     reader = csv.reader(f)
     treap_insert = [float(x) for x in next(reader)]
     treap_delete = [float(x) for x in next(reader)]
@@ -31,5 +31,6 @@ ax2.set_ylabel('Время')
 ax2.legend()
 ax2.grid(True)
 
-plt.tight_layout()plt.savefig("results/Plot.png")
+plt.tight_layout()
+plt.savefig("results/Plot.png")
 plt.show()

@@ -3,7 +3,7 @@ SRC = My_std Naive_tree AVL_tree Treap_tree Tester main
 COMMON_MAKEFILE_PATH = ../Common_Makefile.mk
 include $(COMMON_MAKEFILE_PATH)
 
-.PNONY: all_tests
+.PNONY: all_tests plot total
 
 RESULTS_DIR = results/
 
@@ -33,6 +33,9 @@ all_tests:
 	$(MAKE) $(RESULTS_DIR)AVL_srtd.csv
 
 	$(MAKE) $(RESULTS_DIR)Treap.csv
+
+plot: $(RESULTS_DIR)AVL.csv $(RESULTS_DIR)Treap.csv
+	@python src/plot_drawer.py
 
 clean::
 	@rm -rf $(RESULTS_DIR)
