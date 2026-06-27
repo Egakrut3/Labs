@@ -12,7 +12,7 @@ prepare::
 
 GENERATOR = $(call make_exec_path,gen)
 $(GENERATOR): $(call make_src_path,generator) | prepare
-	@gcc -o $@ -x c -std=gnu23 $<
+	@gcc -o $@ -x c -std=gnu23 -Ofast $<
 
 $(RESULTS_DIR)hash_info_0.csv: $(GENERATOR) | prepare
 	@./$(GENERATOR) 0 $@
